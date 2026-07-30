@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clover Knowledge Hub</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#e6e6e6;
+}
+
+/* MENU */
+
+.sidebar{
+    width:260px;
+    background:#0B865B;
+    padding:20px 15px;
+    color:white;
+}
+
+.logo{
+    background:white;
+    border-radius:8px;
+    padding:15px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.logo h1{
+    color:#0B865B;
+    font-size:34px;
+}
+
+.sidebar-title{
+    text-align:center;
+    font-size:18px;
+    margin-bottom:25px;
+    font-weight:bold;
+}
+
+.category-btn{
+    width:100%;
+    border:none;
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:12px;
+    background:white;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.category-btn:hover{
+    background:#f0f0f0;
+}
+
+/* CONTEÚDO */
+
+.main{
+    flex:1;
+    padding:25px;
+}
+
+.card{
+    background:#f5f5f5;
+    border-radius:8px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.breadcrumb{
+    font-weight:bold;
+}
+
+.header-title{
+    font-size:28px;
+    font-weight:bold;
+}
+
+.header-subtitle{
+    margin-top:5px;
+}
+
+/* IMPORTAÇÃO */
+
+.import-box{
+    margin-bottom:15px;
+}
+
+.upload-btn{
+    background:#0B865B;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    display:inline-block;
+    font-weight:bold;
+}
+
+.upload-btn:hover{
+    background:#08704c;
+}
+
+.upload-btn input{
+    display:none;
+}
+
+/* BUSCA */
+
+.search-box{
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+/* CARD KB */
+
+.kb-card{
+    background:#efefef;
+    border-left:4px solid #0B865B;
+    padding:14px;
+    margin-bottom:15px;
+}
+
+.kb-title{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.kb-card p{
+    margin-bottom:4px;
+    line-height:1.5;
+}
+
+.label{
+    font-weight:bold;
+}
+
+.no-result{
+    background:#fff3cd;
+    border-left:4px solid #ffc107;
+    padding:15px;
+    display:none;
+}
+
+.info{
+    background:#d1ecf1;
+    border-left:4px solid #17a2b8;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <h1>clover</h1>
+    </div>
+
+    <div class="sidebar-title">
+        Categorias
+    </div>
+
+    <button class="category-btn">
+        Problema de Hardware
+    </button>
+
+    <button class="category-btn">
+        Problema Software
+    </button>
+
+    <button class="category-btn">
+        Erro Comunicação
+    </button>
+
+    <button class="category-btn">
+        Erro Transação
+    </button>
+
+</aside>
+
+<!-- CONTEÚDO -->
+
+<main class="main">
+
+    <div class="card breadcrumb">
+        🏠 Home > 📚 Base de Conhecimento
+    </div>
+
+    <div class="card">
+
+        <div class="header-title">
+            🍀 Clover Knowledge Hub
+        </div>
+
+        <div class="header-subtitle">
+            Central de Diagnóstico, Rede, Hardware, Comunicação e Procedimentos.
+        </div>
+
+    </div>
+
+    <!-- IMPORTAR CSV -->
+
+<!-- IMPORTAR CSV -->
+<div class="import-box">
+    <label class="upload-btn">
+        📂 Importar CSV
+        <input type="file" id="csvFile" accept=".csv">
+    </label>
+
+    <a href="modelo.csv"
+       class="upload-btn"
+       style="text-decoration:none; margin-left:10px;">
+       📥 Baixar Modelo CSV
+    </a>
+</div>
+
+
+    <!-- BUSCA -->
+
+    <div class="search-box">
+
+        <input
+        type="text"
+        id="searchInput"
+        placeholder="Pesquisar código (Ex.: ERR401)">
+
+    </div>
+
+    <div class="info">
+        Digite um código após importar o CSV.
+    </div>
+
+    <div id="resultado"></div>
+
+    <div id="noResult" class="no-result">
+        Nenhum resultado encontrado.
+    </div>
+
+<div id="noResult" class="no-result">
+    Nenhum resultado encontrado.
+</div>
+
+<div class="card" style="text-align:center; margin-top:20px;">
+    <strong>Criado por:</strong> Fernando de Melo Ravasi
+</div>
+
+</main>
+
+</main>
+
+<script>
+
+let baseConhecimento = [];
+
+const input = document.getElementById("searchInput");
+const resultado = document.getElementById("resultado");
+const noResult = document.getElementById("noResult");
+
+/* IMPORTAÇÃO CSV */
+
+async function carregarCSV() {
+ 
+try {
+ 
+const resposta = await fetch("bd.csv");
+ 
+const texto = await resposta.text();
+ 
+const linhas = texto
+.replace(/\r/g, "")
+.split("\n");
+ 
+baseConhecimento = [];
+ 
+for (let i = 1; i < linhas.length; i++) {
+ 
+if (!linhas[i].trim()) continue;
+ 
+const colunas = linhas[i].split(";");
+ 
+if (colunas.length < 6) continue;
+ 
+baseConhecimento.push({
+categoria: colunas[0].trim(),
+codigo: colunas[1].trim(),
+sintoma: colunas[2].trim(),
+causa: colunas[3].trim(),
+solucao: colunas[4].trim(),
+classificacao: colunas[5].trim()
+});
+ 
+}
+ 
+console.log(
+baseConhecimento.length +
+" registros carregados automaticamente."
+);
+ 
+} catch (erro) {
+ 
+console.error(
+"Erro ao carregar bd.csv",
+erro
+);
+ 
+}
+ 
+}
+ 
+window.addEventListener(
+"DOMContentLoaded",
+carregarCSV
+);
+
+/* PESQUISA */
+
+function pesquisar(){
+
+    const termo =
+    input.value.toUpperCase().trim();
+
+    resultado.innerHTML = "";
+
+    noResult.style.display = "none";
+
+    if(termo === "")
+    {
+        return;
+    }
+
+    const encontrados =
+    baseConhecimento.filter(item =>
+
+        item.codigo
+        .toUpperCase()
+        .includes(termo)
+
+    );
+
+    if(encontrados.length === 0)
+    {
+        noResult.style.display = "block";
+        return;
+    }
+
+    encontrados.forEach(item => {
+
+        resultado.innerHTML += `
+
+        <div class="kb-card">
+
+            <div class="kb-title">
+                ${item.codigo}
+            </div>
+
+            <p>
+                <span class="label">Categoria:</span>
+                ${item.categoria}
+            </p>
+
+            <p>
+                <span class="label">Sintoma:</span>
+                ${item.sintoma}
+            </p>
+
+            <p>
+                <span class="label">Causa:</span>
+                ${item.causa}
+            </p>
+
+            <p>
+                <span class="label">Solução:</span>
+                ${item.solucao}
+            </p>
+
+            <p>
+                <span class="label">Classificação:</span>
+                ${item.classificacao}
+            </p>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+input.addEventListener("keyup", pesquisar);
+
+</script>
+
+</body>
+</html>
