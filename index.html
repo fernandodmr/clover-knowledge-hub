@@ -1,419 +1,1263 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clover Knowledge Hub</title>
-
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    display:flex;
-    min-height:100vh;
-    background:#e6e6e6;
-}
-
-/* MENU */
-
-.sidebar{
-    width:260px;
-    background:#0B865B;
-    padding:20px 15px;
-    color:white;
-}
-
-.logo{
-    background:white;
-    border-radius:8px;
-    padding:15px;
-    text-align:center;
-    margin-bottom:15px;
-}
-
-.logo h1{
-    color:#0B865B;
-    font-size:34px;
-}
-
-.sidebar-title{
-    text-align:center;
-    font-size:18px;
-    margin-bottom:25px;
-    font-weight:bold;
-}
-
-.category-btn{
-    width:100%;
-    border:none;
-    border-radius:8px;
-    padding:12px;
-    margin-bottom:12px;
-    background:white;
-    cursor:pointer;
-    font-size:14px;
-}
-
-.category-btn:hover{
-    background:#f0f0f0;
-}
-
-/* CONTEÚDO */
-
-.main{
-    flex:1;
-    padding:25px;
-}
-
-.card{
-    background:#f5f5f5;
-    border-radius:8px;
-    padding:15px;
-    margin-bottom:15px;
-}
-
-.breadcrumb{
-    font-weight:bold;
-}
-
-.header-title{
-    font-size:28px;
-    font-weight:bold;
-}
-
-.header-subtitle{
-    margin-top:5px;
-}
-
-/* IMPORTAÇÃO */
-
-.import-box{
-    margin-bottom:15px;
-}
-
-.upload-btn{
-    background:#0B865B;
-    color:white;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    display:inline-block;
-    font-weight:bold;
-}
-
-.upload-btn:hover{
-    background:#08704c;
-}
-
-.upload-btn input{
-    display:none;
-}
-
-/* BUSCA */
-
-.search-box{
-    margin-bottom:20px;
-}
-
-.search-box input{
-    width:100%;
-    padding:14px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-}
-
-/* CARD KB */
-
-.kb-card{
-    background:#efefef;
-    border-left:4px solid #0B865B;
-    padding:14px;
-    margin-bottom:15px;
-}
-
-.kb-title{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:8px;
-}
-
-.kb-card p{
-    margin-bottom:4px;
-    line-height:1.5;
-}
-
-.label{
-    font-weight:bold;
-}
-
-.no-result{
-    background:#fff3cd;
-    border-left:4px solid #ffc107;
-    padding:15px;
-    display:none;
-}
-
-.info{
-    background:#d1ecf1;
-    border-left:4px solid #17a2b8;
-    padding:15px;
-    margin-bottom:15px;
-}
-
+:root{--green:#0b8457;--bg:#e7e7e7;--card:#f2f2f2;--text:#222}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,sans-serif}
+body{display:flex;height:100vh;background:var(--bg);color:var(--text);transition:.4s}
+.sidebar{width:290px;background:var(--green);padding:16px;display:flex;flex-direction:column;animation:slideIn .5s}
+.logo{background:#f2f2f2;border-radius:8px;padding:10px;text-align:center;color:var(--green);font-size:32px;font-weight:700}
+.title{color:#fff;text-align:center;font-size:20px;font-weight:700;margin:14px 0 24px}
+.menu-btn,.theme-btn{padding:14px;border:none;border-radius:8px;margin-bottom:14px;background:#f2f2f2;cursor:pointer;transition:.3s}
+.menu-btn:hover,.theme-btn:hover{transform:translateX(5px)}
+.theme-btn{margin-top:auto}
+.main{flex:1;padding:18px;overflow:auto}
+.card{background:var(--card);padding:16px;border-radius:12px;margin-bottom:12px;transition:.4s}
+.search{width:100%;padding:12px;border-radius:8px;border:1px solid #bbb;margin-bottom:12px}
+.error-card{border-left:5px solid var(--green)}
+.footer{background:var(--card);padding:14px;border-radius:8px;margin-top:20px}
+.hidden{display:none}
+.dark{--bg:#121212;--card:#1f1f1f;--text:#f0f0f0}
+@keyframes slideIn{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
 </style>
 </head>
-
 <body>
-
-<!-- MENU -->
-
-<aside class="sidebar">
-
-    <div class="logo">
-        <h1>clover</h1>
-    </div>
-
-    <div class="sidebar-title">
-        Categorias
-    </div>
-
-    <button class="category-btn">
-        Problema de Hardware
-    </button>
-
-    <button class="category-btn">
-        Problema Software
-    </button>
-
-    <button class="category-btn">
-        Erro Comunicação
-    </button>
-
-    <button class="category-btn">
-        Erro Transação
-    </button>
-
-</aside>
-
-<!-- CONTEÚDO -->
-
-<main class="main">
-
-    <div class="card breadcrumb">
-        🏠 Home > 📚 Base de Conhecimento
-    </div>
-
-    <div class="card">
-
-        <div class="header-title">
-            🍀 Clover Knowledge Hub
-        </div>
-
-        <div class="header-subtitle">
-            Central de Diagnóstico, Rede, Hardware, Comunicação e Procedimentos.
-        </div>
-
-    </div>
-
-    <!-- IMPORTAR CSV -->
-
-<!-- IMPORTAR CSV -->
-<div class="import-box">
-    <label class="upload-btn">
-        📂 Importar CSV
-        <input type="file" id="csvFile" accept=".csv">
-    </label>
-
-    <a href="modelo.csv"
-       class="upload-btn"
-       style="text-decoration:none; margin-left:10px;">
-       📥 Baixar Modelo CSV
-    </a>
+<div class="sidebar">
+<div class="logo">Clover</div>
+<div class="title">Knowledge Hub</div>
+<button class="menu-btn" onclick="filterTopic('Hardware')">Problemas de Hardware</button>
+<button class="menu-btn" onclick="filterTopic('Software')">Problemas de Software</button>
+<button class="menu-btn" onclick="filterTopic('Comunicacao')">Erros de Comunicação</button>
+<button class="menu-btn" onclick="filterTopic('Transacao')">Erros de Transação</button>
+<button class="theme-btn" onclick="toggleTheme()">🌙 Alternar Tema</button>
 </div>
-
-
-    <!-- BUSCA -->
-
-    <div class="search-box">
-
-        <input
-        type="text"
-        id="searchInput"
-        placeholder="Pesquisar código (Ex.: ERR401)">
-
-    </div>
-
-    <div class="info">
-        Digite um código após importar o CSV.
-    </div>
-
-    <div id="resultado"></div>
-
-    <div id="noResult" class="no-result">
-        Nenhum resultado encontrado.
-    </div>
-
-<div id="noResult" class="no-result">
-    Nenhum resultado encontrado.
+<div class="main">
+<div class="card"><b>🏠 Home > 📡 Roteiro de Atendimento</b></div>
+<div class="card"><h2>🍀 Clover Knowledge Hub</h2><p>Central de Diagnóstico, Rede, Hardware, Comunicação, PIX e Procedimentos Clover.</p></div>
+<div class="card">
+<h2>O que significa cada tópico?</h2><br>
+<p><b>Erros Gerais:</b> São erros que podem ocorrer em qualquer máquina Fiserv.</p>
+<p><b>Erros Exclusivos Clover:</b> São erros classificados no equipamento Clover.</p>
+<p><b>Erros Universais:</b> Atrelados ao sistema interno Fiserv.</p>
+<p><b>Erros Sem Código Clover:</b> Exclusivos Clover sem numeração.</p>
+<p><b>Erros Sem Código:</b> Sem identificação numérica.</p>
 </div>
-
-<div class="card" style="text-align:center; margin-top:20px;">
-    <strong>Criado por:</strong> Fernando de Melo Ravasi
+<input class="search" id="search" placeholder="Pesquisar código, sintoma ou categoria..." onkeyup="searchErrors()">
+<div id="errors">
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 0</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Central (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> 0</p>
+<p><b>Sintoma:</b> Transação Negada pelo Cartão</p>
+<p><b>Solução:</b> 1. Realize estímulo no cadastro pelo Salesforce. 2. Realize a atualização (Suporte > 6. Atualização > 1. First App > Sim, ou Suporte > 6. Atualização > 2. Contingência > Sim). 3. Realize uma venda teste.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
 </div>
-
-</main>
-
-</main>
-
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 1</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Central (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> 1</p>
+<p><b>Sintoma:</b> Entrar em Contato com Emissor do Cartão</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 3</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Central (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> 3</p>
+<p><b>Sintoma:</b> Estabelecimento Não Cadastrado</p>
+<p><b>Solução:</b> 1. Identificar se a bandeira já está disponível acesse o BankWorks, abra o módulo I.CSM e utilize a opção Detalhes dos Serviços 2. Em casos em que o cliente informar que tentou realizar a venda na bandeira Cabal ou bandeira Banescard nas modalidades diferentes de crédito e débito 3. Realize estímulo no cadastro pelo Salesforce. 4. Realize a atualização (Suporte > 6. Atualização > 1. First App > Sim, ou Suporte > 6. Atualização > 2. Contingência > Sim) ou acesse o guia. 5. Caso o erro persista abra Ir.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 4</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 4</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> 1. Realize estímulo no cadastro pelo Salesforce. 2. Realize a atualização (Suporte > 6. Atualização > 1. First App > Sim, ou Suporte > 6. Atualização > 2. Contingência > Sim). 3. Realize uma venda teste.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 5</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 5</p>
+<p><b>Sintoma:</b> Transação Não Autorizada (Bandeiras VAN)</p>
+<p><b>Solução:</b> 1. Verifique se a bandeira informada é aceita na tabela de bandeiras VAN. 2. Realize estímulo no cadastro pelo Salesforce. 3. Realize a atualização (Suporte > 6. Atualização > 1. First App > Sim, ou Suporte > 6. Atualização > 2. Contingência > Sim) ou acesse o guia. 4. Realize uma venda teste.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 8</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 8</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Oriente o portador do cartão a entrar em contato com o banco emissor, pois se trata de uma mensagem do banco emissor do cartão.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 10</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 10</p>
+<p><b>Sintoma:</b> Problema Conexão Tente Novamente</p>
+<p><b>Solução:</b> 1. Solicite ao cliente o BIN do cartão (6 primeiros dígitos e 4 últimos do cartão). 2. Questione o supervisor se existe alguma notificação de problema em relação à bandeira ou banco do cartão.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 13</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 13</p>
+<p><b>Sintoma:</b> Valor Inválido</p>
+<p><b>Solução:</b> 1. Informe ao cliente que o valor da venda deve ser superior à zero. 2. Verifique a aliança do EC. 3. Verificar o artigo da aliança.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 14</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 14</p>
+<p><b>Sintoma:</b> Cartão Inválido</p>
+<p><b>Solução:</b> Atenção! Se o erro aconteceu nas bandeiras Eco Card, Cibicard ou Ok Cartões, informe que não é possível fazer a venda pois desde 31/01/2023 não trabalhamos mais com a integradora destas bandeiras. 1. Questione se este erro acontece com todos os cartões ou apenas com cartões específicos. 2. Verifique se a bandeira está em nossa tabela de bandeiras aceitas e se ela é do integrador "Rede Compras". 3. Informe ao cliente que o erro ocorre, porque o cartão não é aceito pela nossa adquirente.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 12</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 12</p>
+<p><b>Sintoma:</b> Transação Não Permitida</p>
+<p><b>Solução:</b> 1. Pergunte a bandeira e a modalidade de venda (débito ou crédito). 2. Veja se a bandeira e a modalidade informada estão ativas no cadastro.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 19</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 19</p>
+<p><b>Sintoma:</b> Falha no Processamento Tentar Novamente</p>
+<p><b>Solução:</b> 1. Questione o cliente qual a moeda que ele está tentando transacionar na máquina. 2. Verifique no CSM > Detalhes da Conta se a moeda é a mesma cadastrada.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 23</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 23</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> 1. Erro 23 emissor: Informe que o portador do cartão deve acionar o banco emissor para verificar o erro. 2. Erro 23 adquirente: Realize estímulo no cadastro pelo Salesforce. 3. Realize a atualização. 4. Faça uma venda teste.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 15</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 15</p>
+<p><b>Sintoma:</b> Invalid Route Service</p>
+<p><b>Solução:</b> Verifique se a bandeira do cartão que o cliente está passando é aceita pelas máquinas.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Transacao">
+<h2>Erro 24</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 24</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> 1. Verifique se a máquina está com o serviço de transação digitada habilitado. 2. Siga o processo de acordo com a origem do erro que está no Transaction Viewer. 3. Após atualização da máquina, oriente o cliente a realizar uma nova tentativa de venda digitada.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 57</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 57</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 42</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 42</p>
+<p><b>Sintoma:</b> Transação Negada ou Transação Cancelada</p>
+<p><b>Solução:</b> 1. Explique ao cliente que o problema pode ocorrer quando a máquina não consegue criptografar as informações do cartão. 2. Solicite a troca do equipamento. 3. Preencha a descrição e salve o caso.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 59</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 59</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 64</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 64</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 55</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 55</p>
+<p><b>Sintoma:</b> Senha Inválida</p>
+<p><b>Solução:</b> Informe ao cliente que esse erro ocorre porque a senha foi digitada incorretamente.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 67</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 67</p>
+<p><b>Sintoma:</b> Contate a Geral do Seu Cartão - Não Tente Novamente</p>
+<p><b>Solução:</b> Cenário: Este erro ocorre devido a uma regra da bandeira Visa. 1. Informe que o cartão ficará bloqueado por 30 dias neste EC. 2. Caso reclame, informe que se trata de uma regra da bandeira.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 70</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 70</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> 1. Siga de acordo com a origem do erro identificada no Transaction Viewer. 2. Realize a abertura de IR. 3. Realize a transferência para abertura de incidente. 4. Informe o prazo de 2 dias úteis.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 61</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 61</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 73</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 73</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 78</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 78</p>
+<p><b>Sintoma:</b> Cartão Inválido - Não Tente Novamente</p>
+<p><b>Solução:</b> 1. Veja no Transaction Viewer se a origem do erro foi adquirente ou emissor. 2. Questione se o número do cartão foi digitado corretamente. 3. Verifique a validade do cartão. 4. Verifique se o cartão permite a operação.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 70</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 70</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 82</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 82</p>
+<p><b>Sintoma:</b> Transação Não Autorizado</p>
+<p><b>Solução:</b> Oriente ao estabelecimento a efetuar uma transação de Crédito no valor pretendido, pois não há pré-autorização para ser confirmada.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 88</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 88</p>
+<p><b>Sintoma:</b> Transação Não Autorizado</p>
+<p><b>Solução:</b> Conceito: O erro 88 começará a aparecer no POS das alianças FISERV e AZULZINHA. Informar: "Prezado cliente, a antecipação pela máquina não está disponível no momento devido às melhorias que estamos realizando, você pode aderir ao serviço nos canais APP Gestão, Portal do Cliente ou atendimento eletrônico."</p>
+<p><b>Classificação:</b> Software/Gateway | Mensagem de Erro | Outros erros</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 77</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 77</p>
+<p><b>Sintoma:</b> Transação Negada</p>
+<p><b>Solução:</b> Questione o cliente qual a bandeira do cartão que ele está tentando utilizar.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 91</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 91</p>
+<p><b>Sintoma:</b> Problemas no Processamento</p>
+<p><b>Solução:</b> 1. Informe ao cliente que o erro ocorreu por demora no retorno da mensagem do banco emissor. 2. Solicite que ele refaça a transação.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 92</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 92</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> 1. Siga de acordo com a origem do erro identificada no Transaction Viewer. 2. Realize a abertura de IR. 3. Transfira para a fila de abertura de incidente. 4. Informe o prazo de 2 dias úteis.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 80</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 80</p>
+<p><b>Sintoma:</b> Problemas no Processamento</p>
+<p><b>Solução:</b> 1. Questione o cliente em quantas parcelas tentou realizar a venda. 2. Verifique no BankWorks o número de parcelas habilitado. 3. Informe caso não esteja habilitado. 4. Verifique interesse na habilitação. 5. Transfira para a Geral de Atendimento.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 94</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 94</p>
+<p><b>Sintoma:</b> Transação Duplicada</p>
+<p><b>Solução:</b> 1. Informe ao cliente que transações de mesmo valor, no mesmo cartão, não são aceitas. 2. Oriente realizar a transação com outro valor. 3. Caso persista, contatar o banco emissor.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 96</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 96</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> 1. Realize a abertura de incidente. 2. Transfira o caso para a fila de abertura de incidente. 3. Informe prazo de 2 dias úteis.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 90</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 90</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 99</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 99</p>
+<p><b>Sintoma:</b> Antecipação</p>
+<p><b>Solução:</b> 1. Verifique se o terminal está com status ativo. 2. Verifique se existe comunicado referente ao erro 99.</p>
+<p><b>Classificação:</b> Software/Gateway | Mensagem de erro | Outros erros</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 51</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 51</p>
+<p><b>Sintoma:</b> Transação Não Autorizado</p>
+<p><b>Solução:</b> Oriente o cliente que o portador do cartão deve entrar em contato com o banco emissor.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 93</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 93</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 62</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 62</p>
+<p><b>Sintoma:</b> Cartão Bloqueado</p>
+<p><b>Solução:</b> Informe ao cliente que o portador do cartão deve entrar em contato com o banco emissor para desbloqueio do cartão.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 58</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 58</p>
+<p><b>Sintoma:</b> Ligar Geral de Atendimento</p>
+<p><b>Solução:</b> Verificar artigo correto da sua aliança.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | 58 - Geral de Atendimento - Status Cadastro</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 97</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Geral (CA) (ST) (SAS) (TEF)</p>
+<p><b>Erro:</b> Erro 97</p>
+<p><b>Sintoma:</b> Transação Não Autorizada</p>
+<p><b>Solução:</b> Siga de acordo com a origem do erro identificada no Transaction Viewer.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 91</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 91</p>
+<p><b>Sintoma:</b> Emissor indisponível</p>
+<p><b>Solução:</b> Identificar bandeira e abrir IR.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro TO</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro TO</p>
+<p><b>Sintoma:</b> PROBLEMAS NA GERAÇÃO DO TOKENLESS</p>
+<p><b>Solução:</b> 1. Verificar Token já gerado. 2. Gerar um novo Token. 3. Direcionar novo Token.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -100</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -100</p>
+<p><b>Sintoma:</b> ERRO INTERNO</p>
+<p><b>Solução:</b> Verificar com supervisão um possível erro Global.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 13</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA)</p>
+<p><b>Erro:</b> Erro 13</p>
+<p><b>Sintoma:</b> VALOR DA TRANSAÇÃO NÃO PERMITIDO - NÃO TENTE NOVAMENTE</p>
+<p><b>Solução:</b> 1. Verificar Transaction se o valor foi debitado. 2. Questionar ao cliente se a venda realizada foi debitada diretamente ao seu app ou portal. 3. Orientá-lo aguardar em até 24h registro da transação no sistema.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 14</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA)</p>
+<p><b>Erro:</b> Erro 14</p>
+<p><b>Sintoma:</b> CARTÃO NÃO ACEITO - CONTATO A CENTRAL DO SEU CARTÃO</p>
+<p><b>Solução:</b> Oriente o cliente que o portador do cartão deve entrar em contato com o banco emissor.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -24</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -24</p>
+<p><b>Sintoma:</b> CARTEIRA DIGITAL - TRN NÃO HABILITADA</p>
+<p><b>Solução:</b> Orientar o cliente a desbloquear o cartão e realizar uma nova transação.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -2502</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -2502</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA (SSL - AN INVALID SSL)</p>
+<p><b>Solução:</b> Código interno, abrir INC caso o problema persista.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Software | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Hardware">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Hardware</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> AUT NÃO DISP</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> CÓD_RESP: 03</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> CÓD_RESP: ZA</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> CÓD_RESP: ZU</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> CRIPTOGRAFIA FALHOU</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> DOC INEXISTENTE</p>
+<p><b>Solução:</b> Abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> ERR CAD ESTAB</p>
+<p><b>Solução:</b> Abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> ERROR GENERAL</p>
+<p><b>Solução:</b> Abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> INVALID FIELD: CHAVE-PIX</p>
+<p><b>Solução:</b> 1. Se houve erro na transação PIX identifique o erro e a resolução a partir da tabela de erros. 2. Caso o erro seja no PIX da Fiserv, identifique o erro e a resolução a partir da tabela de erros. 3. Informe que será aberto um chamado para a área responsável verificar e realize abertura conforme o artigo.</p>
+<p><b>Classificação:</b> Serviços | PIX | Reclamação</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> MSG INVÁLIDA</p>
+<p><b>Solução:</b> Abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> O CLIENTE AUTENTICADO NÃO TEM PERMISSÃO PARA USAR ESSA CHAVE PIX</p>
+<p><b>Solução:</b> 1. Se houve erro na transação PIX identifique o erro e a resolução a partir da tabela de erros. 2. Caso o erro seja no PIX da Fiserv, identifique o erro e a resolução a partir da tabela de erros. 3. Informe que será aberto um chamado para a área responsável verificar e realize abertura conforme o artigo.</p>
+<p><b>Classificação:</b> Serviços | PIX | Reclamação</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -255</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -255</p>
+<p><b>Sintoma:</b> OPERAÇÃO INVÁLIDA</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 28</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 28</p>
+<p><b>Sintoma:</b> ERRO ATIVAÇÃO</p>
+<p><b>Solução:</b> 1. Verificar Status da OS. 2. Liberar Ticket. 3. Realizar instalação.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -30</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -30</p>
+<p><b>Sintoma:</b> TRANSAÇÃO NÃO AUTORIZADA</p>
+<p><b>Solução:</b> Transação Não Autorizada</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -31</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -31</p>
+<p><b>Sintoma:</b> ERRO PINPAD</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -32</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -32</p>
+<p><b>Sintoma:</b> VERIFIQUE OS DADOS INSERIDOS - TICKET NÃO ATIVO</p>
+<p><b>Solução:</b> OS Vencida</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Terminal não Autorizado ou Cadastrado | ERRO 32 OS está vencida</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -40</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -40</p>
+<p><b>Sintoma:</b> CRIPTOGRAFIA FALHOU</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -40</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -40</p>
+<p><b>Sintoma:</b> EMISSOR DESCONHECIDO</p>
+<p><b>Solução:</b> Bandeira Desconhecida</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -40</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -40</p>
+<p><b>Sintoma:</b> NÃO EXISTE CONF</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -40</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -40</p>
+<p><b>Sintoma:</b> SERVIÇO INDISPONÍVEL</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -43</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -43</p>
+<p><b>Sintoma:</b> ERRO DE COMUNICAÇÃO COM O PINPAD</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 12</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 12</p>
+<p><b>Sintoma:</b> ERRO PIN</p>
+<p><b>Solução:</b> Erro na senha do usuário</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Auxilio | Manuseio do Terminal</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -43</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -43</p>
+<p><b>Sintoma:</b> ERRO DE COMUNICAÇÃO COM O PINPAD</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -43</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -43</p>
+<p><b>Sintoma:</b> TRANSAÇÃO NÃO PERMITIDA - NÃO TENTE NOVAMENTE</p>
+<p><b>Solução:</b> Transação Não Permitida</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -499 ou 999</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -499 ou 999</p>
+<p><b>Sintoma:</b> O DISPOSITIVO NÃO ESTÁ ASSOCIADO - O ESTABELECIMENTO</p>
+<p><b>Solução:</b> Problemas de Comunicação ou Dispositivo Associado a Outro EC</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -499 ou 999</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -499 ou 999</p>
+<p><b>Sintoma:</b> O DISPOSITIVO NÃO ESTÁ ASSOCIADO A UM ESTABELECIMENTO</p>
+<p><b>Solução:</b> Problemas de Comunicação ou Dispositivo Associado a Outro EC</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 5</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 5</p>
+<p><b>Sintoma:</b> CONTATE A CENTRAL DO SEU CARTÃO</p>
+<p><b>Solução:</b> Problemas com o Emissor</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF - (SITEF: VERSÃO 250) - SSL – AN INVALID SSL - SEM RECEIVED</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF - ERRO DE VALIDAÇÃO DE INTERFACE: 40905</p>
+<p><b>Solução:</b> Problemas de Download dos Apps Clover.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF - NÃO EXISTE CONF</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF - REALIZE O REGISTRO DO TERMINAL</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5000</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5000</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SERVIDOR</p>
+<p><b>Solução:</b> Problemas de Comunicação com os servidores Fiserv.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5100</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5100</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF - ERRO DE VALIDAÇÃO :40905</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5104</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5104</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -5109</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5109</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA - SSL</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -5110</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5110</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA NO HANDSHAKE GWP</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -5122</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5122</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA - 40905 - ERRO DE VALIDAÇÃO DE INTERFACE</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -5123</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5123</p>
+<p><b>Sintoma:</b> SEM COMUNICAÇÃO COM O SITEF - ERRO DE VALIDAÇÃO DE INTERFACE: 40905</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -5123</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5123</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA - ERRO DE COMUNICAÇÃO: 40905</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -5202</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5202</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA - SSL</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro -5203</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -5203</p>
+<p><b>Sintoma:</b> OCORREU UMA FALHA - SSL</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Reiniciar o equipamento. 3. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -55</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -55</p>
+<p><b>Sintoma:</b> TRANSAÇÃO NÃO PERMITIDA</p>
+<p><b>Solução:</b> Orientar o cliente a verificar o status do cartão e realizar transação novamente.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -58</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -58</p>
+<p><b>Sintoma:</b> TRANSAÇÃO NÃO AUTORIZADA</p>
+<p><b>Solução:</b> Cliente sem saldo no cartão.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -70</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -70</p>
+<p><b>Sintoma:</b> MODO INVALIDO</p>
+<p><b>Solução:</b> Verificar se o cliente possui o modo de transação válido em seu contrato, caso não, transferir retenção.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro -76</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -76</p>
+<p><b>Sintoma:</b> CARTÃO INVÁLIDO</p>
+<p><b>Solução:</b> Orientar o cliente entrar em contato com o emissor.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro -80</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro -80</p>
+<p><b>Sintoma:</b> FALHA DE COMUNICAÇÃO - TENTE MAIS TARDE</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Reinicar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 81</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 81</p>
+<p><b>Sintoma:</b> LOJISTA, CONTATE O ADQUIRENTE</p>
+<p><b>Solução:</b> Orientar cliente entrar em contato com o emissor para verificar se há algum problema.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 815</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 815</p>
+<p><b>Sintoma:</b> FORMATO DE MENSAGEM INVÁLIDO</p>
+<p><b>Solução:</b> Abrir INC para investigação do caso.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>Erro 87</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 87</p>
+<p><b>Sintoma:</b> TRANSAÇÃO POR APROXIMAÇÃO NÃO ACEITA</p>
+<p><b>Solução:</b> Orientar o cliente realizar novamente a transação por aproximação.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro B5</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro B5</p>
+<p><b>Sintoma:</b> CADASTRO DA LOJA ou CHAVE NÃO AUTORIZADO</p>
+<p><b>Solução:</b> Verificar se o cliente possui o contrato ativo, caso não, transferir retenção ou encaminhar para seu gerente.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Motivo de Negativa | Adquirente</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro C4</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro C4</p>
+<p><b>Sintoma:</b> FALHA EM OBTER DADOS DA OPERAÇÃO</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi ou Dados Móveis). 3. Reinicar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro C5</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro C5</p>
+<p><b>Sintoma:</b> FALHA AO REALIZAR ATIVAÇÃO DO EQUIPAMENTO</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Reinicar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro C6</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro C6</p>
+<p><b>Sintoma:</b> RETORNAR UM OBJETO SEM AUTHTOKEN OU BASEURL</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Reiniciar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro F22</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro F22</p>
+<p><b>Sintoma:</b> CONTACTLESS FALHOU</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Reiniciar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 836</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 836</p>
+<p><b>Sintoma:</b> Falha na autênticação do registro</p>
+<p><b>Solução:</b> Wi‑Fi instável, orientar trocar para dados móveis.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 200</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 200</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> Ação solicitada processada com sucesso pelo dispositivo.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 209</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 209</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> Operação cancelada a pedido do usuário.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 400</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 400</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> A solicitação é inválida e as chamadas subsequentes continuarão falhando. Não repita a chamada.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 401</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 401</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> Token de portador (bearer token) inválido fornecido. Você pode repetir a chamada se o token fornecido for atualizado.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 415</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 415</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> A solicitação é inválida e contém dados em um formato não suportado. Você pode repetir a chamada se o conteúdo for alterado para um formato suportado.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 500</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 500</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> O processamento da solicitação falhou devido a um erro desconhecido, e o estado de processamento da operação é indeterminado. Não repita a chamada sem uma análise adicional.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 501</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 501</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> O dispositivo não está disponível para esta chamada e não pode responder. Não repita a chamada.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 503</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 503</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> O dispositivo não está disponível porque está processando outra solicitação. Você pode repetir a solicitação atual mais tarde.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 504</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Exclusivo Clover (CA) (ST) (Mídias Sociais) (TEF) (CLOVER) (SAS) (LOGISTICA) (TC)</p>
+<p><b>Erro:</b> Erro 504</p>
+<p><b>Sintoma:</b> Erro não mapeado, apenas identificado</p>
+<p><b>Solução:</b> O dispositivo não respondeu em tempo hábil. Você pode repetir a solicitação atual mais tarde.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Outros</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 12</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 12</p>
+<p><b>Sintoma:</b> Token Incorreto + Problemas de Comunicação</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Provisionar novo n° de série. 4. Reinicar o equipamento. 5. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 28</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 28</p>
+<p><b>Sintoma:</b> Data e hora incorretos na máquina</p>
+<p><b>Solução:</b> Auxiliar Cliente ou Técnico a alterar Data e Hora do equipamento.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Software | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Hardware">
+<h2>Erro 29</h2>
+<p><b>Tópico:</b> Problemas de Hardware</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 29</p>
+<p><b>Sintoma:</b> Tecnologia GPRS/WIFI descontinuada</p>
+<p><b>Solução:</b> Orientar cliente a solicitar equipamento atual ou transferir para a retenção.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Hardware | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 31</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 31</p>
+<p><b>Sintoma:</b> POS que está com o técnico está atrelado a outro EC ou nunca foi cadastrado</p>
+<p><b>Solução:</b> Reagendar OS ou realizar reset de fábrica se possível.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Terminal não Autorizado | ERRO 29</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 32</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 32</p>
+<p><b>Sintoma:</b> Técnico digitando informação incorreta</p>
+<p><b>Solução:</b> Analisar informação no qual o mesmo está inserindo na máquina e orientar a inserir a informação correta.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Terminal não Autorizado ou Cadastrado | ERRO 31 Tecnico de Campo</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 35</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 35</p>
+<p><b>Sintoma:</b> OS está vencida</p>
+<p><b>Solução:</b> Liberar Ticket.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Autorização | Libera - Ticket</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 41</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 41</p>
+<p><b>Sintoma:</b> O erro 35 acontece quando existe OS de manutenção e desistalação para a mesma POS</p>
+<p><b>Solução:</b> O erro 35 pode acontecer por instabilidade no BW. Antes de reagendar, verifique se o POS tem uma OS de desinstalação em aberto. Caso tenha, faça o cancelamento da OS de manutenção e oriente o Técnico a prosseguir com a desinstalação. Caso não possua uma OS de desinstalação em aberto, prosseguir como o erro 824.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Software | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 43</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 43</p>
+<p><b>Sintoma:</b> CPF do técnico está inválido</p>
+<p><b>Solução:</b> Orientar a colocar o CPF correto. Se estiver correto, solicitar que ele procure a base.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Software | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Hardware">
+<h2>Erro 44</h2>
+<p><b>Tópico:</b> Problemas de Hardware</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 44</p>
+<p><b>Sintoma:</b> POS não corresponde ao projeto</p>
+<p><b>Solução:</b> Reagendar OS e orientar técnico a trocar o equipamento.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Software | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>Erro 129</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 129</p>
+<p><b>Sintoma:</b> Técnico tenta realizar a ativação da máquina utilizando o CPF ou CNPJ divergente do que está em sistema</p>
+<p><b>Solução:</b> Analisar informação no qual o mesmo está inserindo na máquina e orientar a inserir a informação correta.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Software | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 824</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 824</p>
+<p><b>Sintoma:</b> Problemas de comunicação</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Reinicar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Comunicacao">
+<h2>Erro 837</h2>
+<p><b>Tópico:</b> Erros de Comunicação</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro 837</p>
+<p><b>Sintoma:</b> Problemas de comunicação</p>
+<p><b>Solução:</b> 1. Realizar estímulo no cadastro, reset dataware no (TMS), provisionamento no SalesForce. 2. Trocar meio de comunicação (Wi‑Fi / Dados Móveis). 3. Reinicar o equipamento. 4. Se o problema persistir reagendar OS ou abrir INC.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Comunicação | Orientado em Linha</p>
+</div>
+<div class="card error-card item" data-topic="Hardware">
+<h2>Erro E2</h2>
+<p><b>Tópico:</b> Problemas de Hardware</p>
+<p><b>Categoria:</b> Universais (ST) (TEF) (CLOVER) (SAS) (TC)</p>
+<p><b>Erro:</b> Erro E2</p>
+<p><b>Sintoma:</b> Tecnologia GPRS/WIFI descontinuada</p>
+<p><b>Solução:</b> Orientar cliente a solicitar equipamento atual ou transferir para a retenção.</p>
+<p><b>Classificação:</b> Suporte ao Provedor de Serviços | Problemas de Hardware | Orientado em linha</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>APP "VOCÊ NÃO TEM PERMISSÃO PARA USAR O APLICATIVO"</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> APP "VOCÊ NÃO TEM PERMISSÃO PARA USAR O APLICATIVO"</p>
+<p><b>Sintoma:</b> Cliente sem cadastro no sistema Clover</p>
+<p><b>Solução:</b> 1. Direcionar para Retenção para verificar status de cadastro. 2. Abrir IR de cadastro.</p>
+<p><b>Classificação:</b> APP Clover | Solicitação de Suporte | Dúvidas de Manuseio</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>APP TERCEIROS INCOMPATÍVEL</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> APP TERCEIROS INCOMPATÍVEL</p>
+<p><b>Sintoma:</b> Cliente com o App Desatualizado</p>
+<p><b>Solução:</b> Orientar cliente atualizar o app.</p>
+<p><b>Classificação:</b> APP Clover | Solicitação de Suporte | Dúvidas de Manuseio</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>CADASTRO DE CHAVE PIX</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> CADASTRO DE CHAVE PIX</p>
+<p><b>Sintoma:</b> Cadastre Chave Pix</p>
+<p><b>Solução:</b> 1. Pela máquina: O procedimento pela máquina pode ser realizado, porém pedimos que o cliente faça pelo APP conforme descrito no artigo. 2. Bradesco: Para este banco, a única chave PIX que pode ser utilizada é a chave aleatória. 3. CAIXA: O Banco Caixa já pode ser utilizado para cadastro de chave PIX. 4. Itaú: Por determinação do banco, o PIX Itaú é apenas para cadastros CNPJ. 5. Sicredi & SICOOB: Estes bancos só podem ser usados para PIX na máquina da mesma aliança (banco SICREDI na máquina SICREDI, banco Sicoob na máquina SIPAG).</p>
+<p><b>Classificação:</b> Serviços | PIX | Cadastro de Chave POS</p>
+</div>
+<div class="card error-card item" "Erros de Transacao">
+<h2>INSTALAÇÃO LINK DE PAGAMENTO</h2>
+<p><b>Tópico:</b> Erros de Transação</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> INSTALAÇÃO LINK DE PAGAMENTO</p>
+<p><b>Sintoma:</b> Cadastre um Link de Pagamento</p>
+<p><b>Solução:</b> 1. Verificar com gerente ou adquirente uma alternativa de criação de link de pagamento. 2. Cadastrar Link de Pagamento no portal Clover. 3. Realizar venda teste.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | QR Code | Dúvidas Orientação de Uso</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>OS SEM TOKEN - PROVIDER</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> OS SEM TOKEN - PROVIDER</p>
+<p><b>Sintoma:</b> Número de Série sem Associação</p>
+<p><b>Solução:</b> 1. Verificar Dash Clover se o número de série está associada ao estabelecimento. 2. Associar Série no SalesForce. 3. Direcionar Token.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Auxilio | Manuseio do Terminal</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>RELATORIO DE VENDAS - DIVERGÊNCIA</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> RELATORIO DE VENDAS - DIVERGÊNCIA</p>
+<p><b>Sintoma:</b> Relatório de vendas Incompleto</p>
+<p><b>Solução:</b> 1. Orientar cliente verificar no portal. 2. Extrair relatório de vendas via BW ou Transaction. 3. Encaminhar para o cliente caso necessário.</p>
+<p><b>Classificação:</b> Financeiro | Agenda financeira | Consulta</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>SENHA DE ACESSO AO TERMINAL</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> SENHA DE ACESSO AO TERMINAL</p>
+<p><b>Sintoma:</b> Senha de 4 Dígitos do Terminal</p>
+<p><b>Solução:</b> Verificar no Dash Clover a senha e direcionar ao cliente.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Auxilio | Manuseio do Terminal</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>[JOB]FAILED TO FETCH CLOVER TOKEN FROM TMS</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> [JOB]FAILED TO FETCH CLOVER TOKEN FROM TMS</p>
+<p><b>Sintoma:</b> Token incorreto</p>
+<p><b>Solução:</b> 1. Verificar Dash Clover se o número de série está associada ao estabelecimento. 2. Associar Série no SalesForce. 3. Direcionar Token.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Auxilio | Manuseio do Terminal</p>
+</div>
+<div class="card error-card item" data-topic="Software">
+<h2>[JOB]FAILED TO FETCH CLOVER TOKEN FROM TMS | ERRO AO GERAR TOKEN</h2>
+<p><b>Tópico:</b> Problemas de Software</p>
+<p><b>Categoria:</b> Exclusivo Clover Sem Código (CA) (ST) (Mídias Sociais) (CLOVER) (SAS)</p>
+<p><b>Erro:</b> [JOB]FAILED TO FETCH CLOVER TOKEN FROM TMS | ERRO AO GERAR TOKEN</p>
+<p><b>Sintoma:</b> Erro ao Gerar Token</p>
+<p><b>Solução:</b> 1. Associar n° de série no SalesForce. 2. Sem sucesso? Abrir INC. ou trocar o equipamento para um que não esteja associado a um estabelecimento.</p>
+<p><b>Classificação:</b> Procedimentos Operacionais | Auxilio | Manuseio do Terminal</p>
+</div>
+<div class="footer"><b>Criado por:</b> Johnatan Silva Reis | <b>Index:</b> Fernando de Melo Ravasi | <b>©</b> Material de Apoio Interno Fiserv (2026)</div>
+</div>
 <script>
-
-let baseConhecimento = [];
-
-const input = document.getElementById("searchInput");
-const resultado = document.getElementById("resultado");
-const noResult = document.getElementById("noResult");
-
-/* IMPORTAÇÃO CSV */
-
-async function carregarCSV() {
- 
-try {
- 
-const resposta = await fetch("bd.csv");
- 
-const texto = await resposta.text();
- 
-const linhas = texto
-.replace(/\r/g, "")
-.split("\n");
- 
-baseConhecimento = [];
- 
-for (let i = 1; i < linhas.length; i++) {
- 
-if (!linhas[i].trim()) continue;
- 
-const colunas = linhas[i].split(";");
- 
-if (colunas.length < 6) continue;
- 
-baseConhecimento.push({
-categoria: colunas[0].trim(),
-codigo: colunas[1].trim(),
-sintoma: colunas[2].trim(),
-causa: colunas[3].trim(),
-solucao: colunas[4].trim(),
-classificacao: colunas[5].trim()
-});
- 
-}
- 
-console.log(
-baseConhecimento.length +
-" registros carregados automaticamente."
-);
- 
-} catch (erro) {
- 
-console.error(
-"Erro ao carregar bd.csv",
-erro
-);
- 
-}
- 
-}
- 
-window.addEventListener(
-"DOMContentLoaded",
-carregarCSV
-);
-
-/* PESQUISA */
-
-function pesquisar(){
-
-    const termo =
-    input.value.toUpperCase().trim();
-
-    resultado.innerHTML = "";
-
-    noResult.style.display = "none";
-
-    if(termo === "")
-    {
-        return;
-    }
-
-    const encontrados =
-    baseConhecimento.filter(item =>
-
-        item.codigo
-        .toUpperCase()
-        .includes(termo)
-
-    );
-
-    if(encontrados.length === 0)
-    {
-        noResult.style.display = "block";
-        return;
-    }
-
-    encontrados.forEach(item => {
-
-        resultado.innerHTML += `
-
-        <div class="kb-card">
-
-            <div class="kb-title">
-                ${item.codigo}
-            </div>
-
-            <p>
-                <span class="label">Categoria:</span>
-                ${item.categoria}
-            </p>
-
-            <p>
-                <span class="label">Sintoma:</span>
-                ${item.sintoma}
-            </p>
-
-            <p>
-                <span class="label">Causa:</span>
-                ${item.causa}
-            </p>
-
-            <p>
-                <span class="label">Solução:</span>
-                ${item.solucao}
-            </p>
-
-            <p>
-                <span class="label">Classificação:</span>
-                ${item.classificacao}
-            </p>
-
-        </div>
-
-        `;
-
-    });
-
-}
-
-input.addEventListener("keyup", pesquisar);
-
+function toggleTheme(){document.body.classList.toggle('dark');}
+function filterTopic(topic){document.querySelectorAll('.item').forEach(el=>{el.style.display=(el.dataset.topic===topic)?'block':'none';});}
+function searchErrors(){let v=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.item').forEach(e=>{e.style.display=e.innerText.toLowerCase().includes(v)?'block':'none';});}
 </script>
-
-</body>
-</html>
+</body></html>
